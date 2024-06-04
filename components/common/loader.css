@@ -1,0 +1,38 @@
+@keyframes door-open {
+    0%, 100% {
+        transform: perspective(800px) rotateY(0deg);
+    }
+    50% {
+        transform: perspective(800px) rotateY(90deg);
+    }
+}
+
+@keyframes door-close {
+    0%, 100% {
+        transform: perspective(800px) rotateY(0deg);
+    }
+    50% {
+        transform: perspective(800px) rotateY(90deg);
+    }
+}
+
+.loader {
+    width: 100px;
+    height: 100px;
+    background-color: #3498db;
+    position: relative;
+}
+
+.door {
+    width: 50%;
+    height: 100%;
+    background-color: #2c3e50;
+    position: absolute;
+    animation: door-open 1s infinite, door-close 1s infinite 0.5s;
+    box-shadow: #2c3e50;
+}
+
+.door.right {
+    right: 0;
+    animation: door-open 1s infinite, door-close 1s infinite 0.5s;
+}

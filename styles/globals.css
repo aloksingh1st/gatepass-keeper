@@ -2,9 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  z-index: 1;
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
+  --background-start-rgb: #390050;
   --background-end-rgb: 255, 255, 255;
 }
 
@@ -18,16 +22,50 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+@keyframes door-open {
+  0%,
+  100% {
+    transform: perspective(800px) rotateY(0deg);
   }
+  50% {
+    transform: perspective(800px) rotateY(90deg);
+  }
+}
+
+@keyframes door-close {
+  0%,
+  100% {
+    transform: perspective(800px) rotateY(0deg);
+  }
+  50% {
+    transform: perspective(800px) rotateY(90deg);
+  }
+}
+
+.loader {
+  width: 100px;
+  height: 100px;
+  background-color: #3498db;
+  position: relative;
+}
+
+.door {
+  width: 50%;
+  height: 100%;
+  background-color: #2c3e50;
+  position: absolute;
+  animation: door-open 1s infinite, door-close 1s infinite 0.5s;
+  box-shadow: #2c3e50;
+}
+
+.door.right {
+  right: 0;
+  animation: door-open 1s infinite, door-close 1s infinite 0.5s;
+}
+
+#mybgdiv {
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="375" height="74" viewBox="0 0 375 74" fill="none"><path opacity="0.2" d="M375 -0.000823975V40.7342C369.221 41.7805 363.502 43.1338 357.867 44.7882H357.855C348.53 47.5409 339.42 50.9765 330.6 55.0672C262.249 86.4572 200.928 70.9432 147.016 54.9102C107.719 43.2242 72.36 31.2622 41.082 36.9872C30.972 38.9742 21.1869 42.3555 12.007 47.0342C11.75 47.1682 11.496 47.2922 11.249 47.4192C7.47999 49.3062 3.73101 51.3762 0.00100708 53.5932V-0.000823975L375 -0.000823975Z" fill="%23390050"/></svg>');
+  /* background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="375" height="74" viewBox="0 0 375 74" fill="none"><path opacity="0.1" d="M112.963 72.736C89.2222 71.0782 65.9851 65.0899 44.4 55.067C35.5788 50.9764 26.4685 47.5404 17.143 44.787H17.131C11.4965 43.1345 5.7781 41.7829 0 40.738L0 0H375V53.593C371.269 51.375 367.52 49.306 363.752 47.419C363.505 47.292 363.252 47.168 362.994 47.033C353.814 42.3551 344.029 38.9744 333.919 36.988C302.641 31.262 267.282 43.223 227.988 54.909C196.888 64.157 163.33 73.234 127.376 73.235C122.611 73.235 117.807 73.0687 112.963 72.736Z" fill="%23F39519"/></svg>'); */
 }
