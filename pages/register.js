@@ -1,131 +1,109 @@
 import React, { useEffect, useState } from "react";
-import { auth } from "@/config/firebaseConfig";
-import {
-  createUserWithEmailAndPassword,
-  updateProfile,
-  GoogleAuthProvider,
-  signInWithPopup,
-} from "firebase/auth";
-import { useRouter } from "next/router";
-import Image from "next/image";
 import Link from "next/link";
-import { useAuth } from "@/lib/context/AuthContext";
-import { FcGoogle } from "react-icons/fc";
-import {
-  collection,
-  addDoc,
-  getDocs,
-  where,
-  query,
-  deleteDoc,
-  updateDoc,
-  setDoc,
-  doc,
-} from "firebase/firestore";
-import { db } from "../config/firebaseConfig";
 
-const Provider = new GoogleAuthProvider();
+import { FcGoogle } from "react-icons/fc";
+
 
 const Login = () => {
-  const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [repeatPassword, setRepeatPassword] = useState("");
-  const { authUser, isLoading, setAuthUser } = useAuth();
+  // const router = useRouter();
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+  // const [repeatPassword, setRepeatPassword] = useState("");
+  // const { authUser, isLoading, setAuthUser } = useAuth();
 
-  useEffect(() => {
-    if (!isLoading && authUser) {
-      router.push("/checker");
-    }
-  }, [authUser, isLoading, router]);
+  // useEffect(() => {
+  //   if (!isLoading && authUser) {
+  //     router.push("/checker");
+  //   }
+  // }, [authUser, isLoading, router]);
 
-  // if (auth?.currentUser?.email) {
-  //   login({ username: auth?.currentUser?.email });
-  // }
+  // // if (auth?.currentUser?.email) {
+  // //   login({ username: auth?.currentUser?.email });
+  // // }
 
-  const singupHandler = async (e) => {
-    e.preventDefault();
-    if (!email || !password || !repeatPassword) return;
-    try {
-      const username = email.split("@")[0];
-      const { user } = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      await updateProfile(auth.currentUser, {
-        displayName: username,
-      });
+  // const singupHandler = async (e) => {
+  //   e.preventDefault();
+  //   if (!email || !password || !repeatPassword) return;
+  //   try {
+  //     const username = email.split("@")[0];
+  //     const { user } = await createUserWithEmailAndPassword(
+  //       auth,
+  //       email,
+  //       password
+  //     );
+  //     await updateProfile(auth.currentUser, {
+  //       displayName: username,
+  //     });
 
-      setAuthUser({
-        uid: user.uid,
-        email: user.email,
-        displayName: username,
-        roleProvided: user.uid,
-      });
+  //     setAuthUser({
+  //       uid: user.uid,
+  //       email: user.email,
+  //       displayName: username,
+  //       roleProvided: user.uid,
+  //     });
 
-      console.log(authUser);
-      const existingUser = doc(db, "users", user.uid);
-      const userData = {
-        email: user.email,
-        displayName: username,
-        role: "student",
-        uid: user.uid,
-      };
+  //     console.log(authUser);
+  //     const existingUser = doc(db, "users", user.uid);
+  //     const userData = {
+  //       email: user.email,
+  //       displayName: username,
+  //       role: "student",
+  //       uid: user.uid,
+  //     };
 
-      await setDoc(existingUser, userData);
-    } catch (error) {
-      console.error("An error occured", error);
-    }
-  };
+  //     await setDoc(existingUser, userData);
+  //   } catch (error) {
+  //     console.error("An error occured", error);
+  //   }
+  // };
 
 
-  const addUserToFirestore = async (user) => {
-    try {
-      const existingUser = doc(db, "users", user.uid);
-      const usersRef = collection(db, "users");
+  // const addUserToFirestore = async (user) => {
+  //   try {
+  //     const existingUser = doc(db, "users", user.uid);
+  //     const usersRef = collection(db, "users");
 
-      // Check if the user already exists in Firestore by UID
-      // const existingUser = await usersRef.doc(user.uid).get();
+  //     // Check if the user already exists in Firestore by UID
+  //     // const existingUser = await usersRef.doc(user.uid).get();
 
-      if (!existingUser.exists) {
-        // If the user doesn't exist in Firestore, add them
-        // await addDoc(collection(db, "users"), {
-        //   displayName: user.displayName,
-        //   email: user.email,
-        //   phoneNumber:user.phoneNumber,
-        //   uid:user.uid,
-        //   // photoUrl:user.photoUrl,
-        // });
+  //     if (!existingUser.exists) {
+  //       // If the user doesn't exist in Firestore, add them
+  //       // await addDoc(collection(db, "users"), {
+  //       //   displayName: user.displayName,
+  //       //   email: user.email,
+  //       //   phoneNumber:user.phoneNumber,
+  //       //   uid:user.uid,
+  //       //   // photoUrl:user.photoUrl,
+  //       // });
 
-        const studentData = {
-          displayName: user.displayName,
-          email: user.email,
-          phoneNumber: user.phoneNumber,
-          uid: user.uid,
-          role: "student",
-        };
+  //       const studentData = {
+  //         displayName: user.displayName,
+  //         email: user.email,
+  //         phoneNumber: user.phoneNumber,
+  //         uid: user.uid,
+  //         role: "student",
+  //       };
 
-        await setDoc(existingUser, studentData);
-      }
+  //       await setDoc(existingUser, studentData);
+  //     }
 
-      console.log("User added to Firestore:", user.uid);
-    } catch (error) {
-      console.error("Error adding user to Firestore:", error);
-    }
-  };
+  //     console.log("User added to Firestore:", user.uid);
+  //   } catch (error) {
+  //     console.error("Error adding user to Firestore:", error);
+  //   }
+  // };
 
-  console.log(authUser)
-  // Sign in with Google
-  const signInWithGoogle = async () => {
-    const user = await signInWithPopup(auth, Provider);
-    console.log(user.user);
-    await addUserToFirestore(user.user);
-  };
+  // console.log(authUser)
+  // // Sign in with Google
+  // const signInWithGoogle = async () => {
+  //   const user = await signInWithPopup(auth, Provider);
+  //   console.log(user.user);
+  //   await addUserToFirestore(user.user);
+  // };
 
   return (
     <>
-      <div className="block justify-center m-auto items-center md:w-[25%]">
+      {/* <div className="block justify-center m-auto items-center md:w-[25%]">
         <Image
           className="m-auto"
           src={"/graphics/logo2.png"}
@@ -208,7 +186,7 @@ bg-[#390050] rounded-[10px] text-white"
             Sign in
           </Link>
         </p>
-      </div>
+      </div> */}
     </>
   );
 };
