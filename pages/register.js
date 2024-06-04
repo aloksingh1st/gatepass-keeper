@@ -104,14 +104,7 @@ const Login = () => {
   return (
     <>
       {/* <div className="block justify-center m-auto items-center md:w-[25%]">
-        <Image
-          className="m-auto"
-          src={"/graphics/logo2.png"}
-          height={240}
-          width={238}
-          alt="Logo"
-        />
-        {/* //comment  */}
+    
 
         <h2 className="text-2xl px-5 mb-4 mt-[-2rem]">Create your Account</h2>
 
